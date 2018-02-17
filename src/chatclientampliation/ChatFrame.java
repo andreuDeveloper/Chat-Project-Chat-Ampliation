@@ -44,6 +44,7 @@ public class ChatFrame extends JFrame implements ActionListener {
     private JPanel jPanelLog;
     private JPanel jPanelChat;
     private JPanel jPanelSettings;
+    private JPanel jPanelInfoChat;
     private JPanel jPanelBotChat;
     private JButton jBtnColorBack;
     private JButton jBtnColorFont;
@@ -63,6 +64,10 @@ public class ChatFrame extends JFrame implements ActionListener {
     private JTextArea jTxArea;
     private JScrollPane jScrollPane;
     private JTextField jTxMesage;
+
+    private JLabel jLbMsgReceived;
+    private JLabel jLbMsgSend;
+    private JLabel jLbTotalClients;
 
     // Clases
     private final ClientProject clientProject;
@@ -127,11 +132,46 @@ public class ChatFrame extends JFrame implements ActionListener {
         this.jBtnAccept.setForeground(Color.WHITE);
         this.jBtnAccept.setFont(new Font("Arial", 1, 20));
 
-        c.fill = GridBagConstraints.BOTH;
+        this.jLbTotalClients = new JLabel("CLIENTS: 0");
+        this.jLbTotalClients.setHorizontalAlignment(0);
+        this.jLbTotalClients.setFont(new Font("Arial", 1, 17));
+        this.jLbTotalClients.setForeground(Color.WHITE);
+        this.jLbMsgSend = new JLabel("MESSAGES SEND: 0");
+        this.jLbMsgSend.setHorizontalAlignment(0);
+        this.jLbMsgSend.setFont(new Font("Arial", 1, 17));
+        this.jLbMsgSend.setForeground(Color.WHITE);
+        this.jLbMsgReceived = new JLabel("MESSAGES RECEIVED: 0");
+        this.jLbMsgReceived.setHorizontalAlignment(0);
+        this.jLbMsgReceived.setFont(new Font("Arial", 1, 17));
+        this.jLbMsgReceived.setForeground(Color.WHITE);
 
+        //----- CHAT
+        //Info Panel
+        c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
         c.weighty = 1;
+        c.insets = new Insets(10, 10, 10, 10);
+        this.jPanelInfoChat = new JPanel();
+        this.jPanelInfoChat.setBackground(new Color(0x00695C));
+        this.jPanelInfoChat.setLayout(new GridBagLayout());
+        this.jPanelInfoChat.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE));
 
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        jPanelInfoChat.add(jLbTotalClients, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        jPanelInfoChat.add(jLbMsgSend, c);
+
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        jPanelInfoChat.add(jLbMsgReceived, c);
+
+        // 
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 6;
@@ -207,6 +247,7 @@ public class ChatFrame extends JFrame implements ActionListener {
 
         this.jPanelChat = new JPanel();
         jPanelChat.setLayout(new BorderLayout());
+        jPanelChat.add(jPanelInfoChat, BorderLayout.NORTH);
         jPanelChat.add(jScrollPane, BorderLayout.CENTER);
         jPanelChat.add(jPanelBotChat, BorderLayout.SOUTH);
 
@@ -321,7 +362,7 @@ public class ChatFrame extends JFrame implements ActionListener {
                 this.jTabPane.setSelectedIndex(1);
                 enableHomeWindow(false);
                 this.clientProject.createConnection(userName, host, port);
-                        
+
             } else {
                 JOptionPane.showMessageDialog(null, "Please, choose a server and a name");
             }
@@ -338,7 +379,7 @@ public class ChatFrame extends JFrame implements ActionListener {
         String msg = this.jTxMesage.getText().trim();
         if (msg.length() != 0) {
             this.clientProject.sendMessage(msg);
-            System.out.println("Message of frame: "+msg);
+            System.out.println("Message of frame: " + msg);
         }
         this.jTxMesage.setText("");
         this.jTxMesage.requestFocus();
@@ -356,6 +397,7 @@ public class ChatFrame extends JFrame implements ActionListener {
     /**
      * Add a new server with the specificated socket and inizialize the thread
      *
+     * @param b
      * @param sock Socket for communicate with the server
      */
     public void enableSendMessages(boolean b) {
@@ -368,6 +410,18 @@ public class ChatFrame extends JFrame implements ActionListener {
         this.jTxPORT.setEnabled(b);
         this.jTxName.setEnabled(b);
         this.jBtnAccept.setEnabled(b);
+    }
+
+    public void setMsgReceived(int n) {
+        this.jLbMsgReceived.setText("MESSAGES RECEIVED: " + String.valueOf(n));
+    }
+
+    public void setMsgSend(int n) {
+        this.jLbMsgSend.setText("MESSAGES SEND: " + String.valueOf(n));
+    }
+
+    public void setTotalClients(int n) {
+        this.jLbTotalClients.setText("CLIENTS: " + String.valueOf(n));
     }
 
 }

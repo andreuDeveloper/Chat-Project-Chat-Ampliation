@@ -14,17 +14,24 @@ import java.net.Socket;
  */
 public class ClientProject {
 
-    private ChatFrame chatFrame;
-    private ClientServerHandler serverHandler;
+    private final ChatFrame chatFrame;
+    private final ClientServerHandler serverHandler;
 
     private Server server;
-    private String userName;
     private String host;
     private int port;
+
+    private String userName;
+    private int msgSend;
+    private int msgReceived;
+    private int totalClients;
 
     public ClientProject(ChatFrame chatFrame) {
         this.chatFrame = chatFrame;
         this.serverHandler = new ClientServerHandler(this);
+        this.msgSend = 0;
+        this.msgReceived = 0;
+        this.totalClients = 0;
     }
 
     /**
@@ -49,7 +56,10 @@ public class ClientProject {
      * @param msg Message to send
      */
     public void sendMessage(String msg) {
+        this.msgSend++;
+        System.out.println("MESSAGE SENDED: " + msg);
         this.server.sendMessage(this.userName, msg);
+        this.chatFrame.setMsgSend(this.msgSend);
     }
 
     /**
@@ -58,7 +68,10 @@ public class ClientProject {
      * @param msg
      */
     public void addMessage(String msg) {
+        this.msgReceived++;
+        System.out.println("MESSAGE RECEIVED: " + msg);
         this.chatFrame.addMessage(msg);
+        this.chatFrame.setMsgReceived(this.msgReceived - msgSend);
     }
 
     /**
@@ -95,4 +108,7 @@ public class ClientProject {
         this.addMessage("Connection lost, trying to reconnect ...");
     }
 
+    public void getTotalClients() {
+
+    }
 }
