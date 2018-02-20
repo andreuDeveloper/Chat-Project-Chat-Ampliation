@@ -51,6 +51,7 @@ public class ChatFrame extends JFrame implements ActionListener {
     private JLabel jLbColorBack;
     private JLabel jLbColorFont;
     private JLabel jLbFontSize;
+    private JLabel jLbTesting;
     private JSlider jSlFont;
     private JLabel jLbName;
     private JTextField jTxName;
@@ -282,23 +283,33 @@ public class ChatFrame extends JFrame implements ActionListener {
         this.jLbFontSize.setHorizontalAlignment(0); //Center
         this.jLbFontSize.setFont(new Font("Arial", 1, 30));
         this.jLbFontSize.setForeground(Color.WHITE);
-
+        
         this.jSlFont = new JSlider(15, 40, 20);
         this.jSlFont.setBackground(new Color(0x004D40));
         this.jSlFont.addChangeListener(new ChangeListener() {
 
             @Override
             public void stateChanged(ChangeEvent ce) {
-                jTxArea.setFont(new Font("Arial", Font.PLAIN, jSlFont.getValue()));
+                int size = jSlFont.getValue();
+                jTxArea.setFont(new Font("Arial", Font.PLAIN, size));
+                jLbTesting.setFont(new Font("Arial", Font.PLAIN, size));
             }
         });
 
+        this.jLbTesting = new JLabel("Welcome to the Chat!");
+        this.jLbTesting.setHorizontalAlignment(0);
+        this.jLbTesting.setFont(new Font("Arial", Font.PLAIN, 20));
+        this.jLbTesting.setForeground(Color.white);
+        this.jLbTesting.setOpaque(true);
+        this.jLbTesting.setBackground(new Color(0x009688));
+        
         this.jPanelSettings.add(this.jLbColorBack);
         this.jPanelSettings.add(this.jBtnColorBack);
         this.jPanelSettings.add(this.jLbColorFont);
         this.jPanelSettings.add(this.jBtnColorFont);
         this.jPanelSettings.add(this.jLbFontSize);
         this.jPanelSettings.add(this.jSlFont);
+        this.jPanelSettings.add(this.jLbTesting);
 
         jTabPane.addTab("  HOME  ", createImageIcon("./img/home.png"), jPanelLog);
         jTabPane.addTab("  CHAT  ", createImageIcon("./img/chat.png"), jPanelChat);
@@ -335,10 +346,14 @@ public class ChatFrame extends JFrame implements ActionListener {
                 createConnection();
                 break;
             case "BACKGROUND COLOR":
-                this.jTxArea.setBackground(JColorChooser.showDialog(null, "Choose a color", Color.WHITE));
+                Color c = JColorChooser.showDialog(null, "Choose a color", Color.WHITE);
+                this.jTxArea.setBackground(c);
+                this.jLbTesting.setBackground(c);
                 break;
             case "FONT COLOR":
-                this.jTxArea.setForeground(JColorChooser.showDialog(null, "Choose a color", Color.BLACK));
+                c = JColorChooser.showDialog(null, "Choose a color", Color.BLACK);
+                this.jTxArea.setForeground(c);
+                this.jLbTesting.setForeground(c);
                 break;
             case "SEND":
                 sendMessage();
